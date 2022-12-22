@@ -6,7 +6,7 @@ export type MidiValue = number
 export type PitchIndex = number
 
 export type Note = {
-    midiValue: MidiValue
+    midi: MidiValue
     type: NoteType
     pitch: NotePitch
     index: PitchIndex
@@ -46,7 +46,7 @@ export function fromMidi(midiValue: MidiValue): Note {
     const isSharp = !NATURAL_PITCH_INDICES.includes(indexOfNoteWithinOctave)
     const type: NoteType = isSharp ? "sharp" : "natural"
 
-    return { midiValue, type, pitch, index: indexOfNoteWithinOctave, octave: octaveIndex }
+    return { midi: midiValue, type, pitch, index: indexOfNoteWithinOctave, octave: octaveIndex }
 }
 
 type NotesGeneratorSettings = {
