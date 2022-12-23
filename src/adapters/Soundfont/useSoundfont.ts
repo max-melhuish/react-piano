@@ -18,7 +18,9 @@ interface Adapted {
 }
 
 export function useSoundfont({ AudioContext }: Settings): Adapted {
+
     let activeNodes: AudioNodesRegistry = {}
+
     const [current, setCurrent] = useState<Optional<InstrumentName>>(null)
     const [loading, setLoading] = useState(false)
     const [player, setPlayer] = useState<Optional<Player>>(null)
@@ -33,21 +35,22 @@ export function useSoundfont({ AudioContext }: Settings): Adapted {
         setPlayer(player)
     }
 
-    async function resume() {
+    async function resume(): Promise<void | (() => Promise<void>)> {
         return audio.current.state === 'suspended'
             ? await audio.current.resume
             : Promise.resolve()
     }
 
-    async function play(note: MidiValue) {
+    async function play(note: MidiValue): Promise<void> {
         await resume()
         if (!player) return
 
         const node = player.play(note.toString())
         activeNodes = { ...activeNodes, [note]: node }
+        console.log(activeNodes)
     }
 
-    async function stop(note: MidiValue) {
+    async function stop(note: MidiValue): Promise<void> {
         await resume()
         if (!activeNodes[note]) return
 
